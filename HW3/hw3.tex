@@ -1,0 +1,411 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance,mathtools}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{setspace}
+%\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage{enumerate}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+\usepackage[ruled,lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{tikz}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewenvironment{solution}[1][Solution]{~\\ \textbf{#1.}}{~\\}
+
+\newcommand{\prob}{\mathtt{Pr}}
+
+\newcommand{\postscript}[2]
+{\setlength{\epsfxsize}{#2\hsize}
+\centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+\SetKwFor{Function}{function}{:}{end}
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+
+\title{计算方法\ 作业3}
+\author{刘彦铭\ \ ID: 122033910081}
+\date{Last Edited:\ \today}
+
+\begin{document}
+
+\maketitle
+
+李庆杨等, 数值分析, 第5版, 华中科大, P.199,
+1,2,3,4,5,6,7,8,9,11,12,13,15,16,17,19,20,21,22,24,26,27,28,30,32,33
+
+\begin{itemize}
+    \item [1.] 习题1
+    
+    \begin{itemize}
+        \item [(1)] 中间过程全用 4 位小数计算，直接消元：进行三次行变换 
+        $R_1 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\ -0.5483 &    1 &    0 &    0 \\ -0.8899 &    0 &    1 &    0 \\ -0.4355 &    0 &    0 &    1
+        \end{array}\right]$, 
+        $R_2 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\    0 &    1 &    0 &    0 \\    0 & -0.2573 &    1 &    0 \\    0 & -1.0845 &    0 &    1
+        \end{array}\right]$,
+        $R_3 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\    0 &    1 &    0 &    0 \\    0 &    0 &    1 &    0 \\    0 &    0 & -163.8330 &    1
+        \end{array}\right]$, 得到线性方程组：
+        $$\left[\begin{array}{cccc}
+            0.4096 & 0.1234 & 0.3678 & 0.2943 \\    0 & 0.3195 & 0.1998 & -0.0485 \\    0 &    0 & -0.0006 & -0.1851 \\    0 &    0 &   0 & 30.6426
+        \end{array}\right] \left[\begin{array}{c}x_1\\x_2\\x_3\\x_4\end{array}\right] = \left[\begin{array}{c}
+            0.4043 \\ -0.0667 \\ 0.0814 \\ -13.6955
+        \end{array}\right]$$
+
+        得到解：$[x_1, x_2, x_3, x_4] ^ \top = [-0.1709, -1.6536,  2.2020,  -0.4469]^\top$
+
+        \item [(2)] 中间过程仍用 4 位小数计算，但选取列主元，进行三次消元（置换+消去）
+        
+        $R_1 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\ -0.5483 &    1 &    0 &    0 \\ -0.8899 &    0 &    1 &    0 \\ -0.4355 &    0 &    0 &    1
+        \end{array}\right]$,
+        $P_2 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\    0 &    0 &    0 &    1 \\    0 &    0 &    1 &    0 \\    0 &    1 &    0 &    0
+     \end{array}\right]$,
+        $R_2 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\    0 &    1 &    0 &    0 \\    0 & -0.2372 &    1 &    0 \\    0 & -0.9221 &    0 &    1
+     \end{array}\right]$,
+        $P_3 = \left[\begin{array}{cccc}
+            1 &    0 &    0 &    0 \\    0 &    1 &    0 &    0 \\    0 &    0 &    0 &    1 \\    0 &    0 &    1 &    0
+     \end{array}\right]$,
+        $R_3 = \left[ \begin{array}{cccc}
+            1 &    0 &    0 &    0 \\    0 &    1 &    0 &    0 \\    0 &    0 &    1 &    0 \\    0 &    0 & -0.2506 &    1
+     \end{array}\right]$, 
+        $Ax = b$ $\to$ $(R_3P_3R_2P_2R_1)Ax = (R_3P_3R_2P_2R_1)b$, 即得到线性方程组：
+
+    $$\left[
+    \begin{array}{cccc}
+        0.4096 & 0.1234 & 0.3678 & 0.2943 \\    0 & 0.3465 & 0.1184 & 0.2645 \\    0 &    0 & 0.0906 & -0.2924 \\    0 &    0 &   0 & -0.1870
+    \end{array}\right]\left[\begin{array}{c}x_1\\x_2\\x_3\\x_4\end{array}\right] = 
+    \left[\begin{array}{c}
+        0.4043 \\ -0.4318 \\ 0.3315 \\ 0.0835
+    \end{array}\right]
+    $$
+    得到解：$[x_1, x_2, x_3, x_4] ^ \top = [-0.1826, -1.6632,  2.2179, -0.4465]^\top$
+    \end{itemize}
+
+    很显然，(2)和(1)的解不完全一样，为对比误差，可计算误差 $||A\hat{x} - b||_2$, 可知 (1) 的解对应的误差范数为 $1.5484$, (2) 的解对应的误差范数为 $1.0858\times 10^{-4}$,
+    在本例中，列主元消元的解精度更高。 
+
+    \item [2.] 习题2
+    
+    \begin{itemize}
+        \item [(1)] 由于消元时不会消去第一行，所以消元前，$A = \left[\begin{array}{cc}a_{11}&a_1^\top\\a_1&A_1\end{array}\right]$, 且 $A_1$ 是对称矩阵。据消元过程 $A_2 = A_1 - a_{11}^{-1}a_1a_1^\top$, 显然是对称阵。 
+        \item [(2)] $\left[\begin{array}{ccc}
+            0.6428 & 0.3475 & -0.8468 \\ 0.3475 & 1.8423 & 0.4759 \\ -0.8468 & 0.4759 & 1.2147
+        \end{array}\right] \left[\begin{array}{c}x_1\\x_2\\x_3\end{array}\right] = \left[
+            \begin{array}{c}
+                0.4127 \\ 1.7321 \\ -0.8621
+            \end{array}
+        \right]$
+        这里直接给出 LU 分解的结果 $PA = LU$（对应高斯消元）
+        $P = \left[\begin{array}{ccc}
+            0 &   0 &   1 \\   0 &   1 &   0 \\   1 &   0 &   0
+      \end{array}\right]$, $L=\left[\begin{array}{ccc}
+        1 &   0 &   0 \\ -0.410368 &   1 &   0 \\ -0.759093 & 0.347838 &   1
+        \end{array}\right]$,
+        $U = \left[\begin{array}{ccc}
+            -0.8468 & 0.4759 & 1.2147 \\   0 & 2.03759 & 0.974375 \\   0 &   0 & -0.263654
+        \end{array}\right]$
+        % x = U^-1 L^-1 L U x = U^-1 L^-1 P b
+        $\left[\begin{array}{c}x_1\\x_2\\x_3\end{array}\right] = x = U^{-1}L^{-1}Pb = \left[\begin{array}{c}
+            4.587 \\ -0.632 \\ 2.735
+        \end{array}\right]$
+    \end{itemize}
+
+    \item [3.] 习题3
+    \begin{spacing}{1.25}
+    \begin{itemize}
+        \item [(1)] 利用数学归纳法证明 $a_{ij}^{(k)} = a_{ij}^{(1)} - \sum_{t=1}^{k-1} m_{it}a_{tj}^{(t)}$: (a) $k=1$ 时，显然成立；(b) 由(7.2.9)的递推式：
+        $a_{ij}^{(k+1)} = a_{ij}^{(k)} - m_{ik}a_{kj}^{(k)} = a_{ij}^{(1)} - \sum_{t=1}^{k-1} m_{it}a_{tj}^{(t)} - m_{ik}a_{kj}^{(k)} = a_{ij}^{(1)} - \sum_{t=1}^{k} m_{it}a_{tj}^{(t)}$. 
+        \item [(2)] 直接代入 $u_{rj} = a_{rj}^{(r)} = a_{rj}^{(1)} - \sum_{t=1}^{r-1} m_{rt}a_{tj}^{(t)} = a_{rj} - \sum_{t=1}^{r-1}l_{rt}u_{tj}= a_{rj} - \sum_{k=1}^{r-1}l_{rk}u_{kj}$.
+        由 (1) 知: 对于 $i>r$, $a_{ir}^{(r)} = a_{ir} - \sum_{k=1}^{r-1} l_{ik} u_{kr}$, 所以 $l_{ir} = m_{ir} = a^{(r)}_{ir}/a^{(r)}_{rr} = (a_{ir} - \sum_{k=1}^{r-1} l_{ik} u_{kr}) / u_{rr}$
+    \end{itemize}
+    \end{spacing}
+
+    \item [4.] 习题4
+    
+    记 $A_k$ 表示由 $A$ 的前$k$行前$k$列构成的子矩阵. $LU = \left[\begin{array}{cc}L_k&0\\\star_1&\star_2\end{array}\right] \left[\begin{array}{cc}U_k&\star_3\\0&\star_4\end{array}\right]
+    =\left[\begin{array}{cc}L_kU_k&\star_5\\\star_6&\star_7\end{array}\right] = A$. 从而 $A_k = L_kU_k$, $\det(A_k) = \det(L_k)\cdot\det(U_k)\ne 0$, 因为单位三角阵的顺序主子式不为零。
+~\\
+    \item [5.] 习题5
+    
+    由于顺序主子式均非$0$, 所以 可以顺利地进行不选择主元的高斯消元，最终得到方程 $A^{(n)}x = b^{(n)}$， 其中 $A^{(n)} = L_{n-1}L_{n-2}\cdots L_1A$ 是一个上三角矩阵，而 $L_i, 1\leq i < n$ 均为单位下三角的初等行变换矩阵。
+    
+    令 $U = A^{(n)}$, $L = L_1^{-1}\cdots L_{n-1}^{-1}$, 即得到 $A = LU$, 且满足 $L$ 是单位下三角阵，$U$是上三角阵。
+
+    \item [6.] 习题6
+    \begin{spacing}{1.5}
+    
+    对于 $i, j \geq 2$, 经过一次消元后（消去第一列），$a_{ij}^{\prime} = a_{ij} - a_{i1} / a_{11} \times a_{1j}$.
+     
+    考虑消元之后的第 $i$ 行，$i > 1$, $|a_{ii}^\prime| = |a_{ii} - a_{i1} / a_{11}\times a_{1i}| \geq |a_{ii}| - |a_{i1} / a_{11}| \cdot |a_{1i}|$
+
+    由于 $\sum_{j > 1, j\ne i} |a_{ij}| \leq \sum_{j > 1, j\ne i} \left(|a_{ij}| + |a_{i1}/a_{11}|\cdot |a_{1j}|\right)$，所以 
+    $$\begin{array}{ll}|a^\prime_{ii}| - \sum_{j > 1, j\ne i} |a^\prime_{ij}| &\geq |a_{ii}| - |a_{i1}/a_{11}|\cdot |a_{1i}| - \sum_{j > 1, j\ne i} |a_{ij}| - |a_{i1} / a_{11}| \cdot \sum_{j>1, j\ne i} |a_{1j}| \\ 
+        &= |a_{ii}| - \sum_{j > 1, j\ne i} |a_{ij}| - |a_{i1}| / |a_{11}| \cdot \sum_{j\ne i} |a_{1j}|\\
+        & > |a_{ii}| - \sum_{j > 1, j\ne i} |a_{ij}| - |a_{i1}|\\ 
+        &= |a_{ii}| - \sum_{j\ne i} |a_{ij}|\\
+        &> 0.
+    \end{array}$$
+    故而 $A_2$ 子矩阵仍是对角占优矩阵。
+
+    \end{spacing}
+
+    \item [7.] 习题7
+    \begin{spacing}{1.5}
+        
+    \begin{itemize}
+        \item [(1)] 由于 $A$ 是对称正定矩阵，故存在 Cholesky 分解：$A = LL^\top$. 从而 $A_{ii} = \sum_{k} L_{ik}L^\top{ki} = \sum_{k\leq i} L_{ik}^2$. 因为$A = LL^\top$是正定矩阵，故 $L$ 任一行向量不为零向量，所以 $A_{ii} = \sum_{k\leq i} L_{ik}^2 > 0$.
+        \item [(2)] 对消元前的 $A$ 分块，$A = \left[\begin{array}{cc}a_{11} & a_1^\top \\ a_1 & A_1\end{array}\right]$, 据高斯消元过程，有 $A_2 = A_1 - (a_{11})^{-1}a_1a_1^\top$ 显然对称. 对于任意 $x\in\mathbb{R}^{n-1}$, 令 $\beta = -(a_{11})^{-1}a_1^\top x\in\mathbb{R}$, 由于 $A$ 正定，故 $[\beta; x^\top] \left[\begin{array}{cc}a_{11}&a_1^\top\\a_1&A_1\end{array}\right]\left[\begin{array}{c}\beta\\x\end{array}\right] > 0$, 展开即得：$x^\top A_1 x + 2\beta a_1^\top x + \beta^2 a_{11} = x^\top A_1 x - (a_{11})^{-1}(a_1^\top x)(a_1^\top x) = x^\top A_2 x > 0$. 所以 $A_2$ 对称且正定。
+        \item [(3)] 由于 $A_2 = A_1 - (a_{11})^{-1}a_1a_1^\top$, $a_1\in\mathbb{R}^{n\times 1}$, $a_{11} > 0$. 显然有 $A_2$ 对角线元素小于等于对应位置的 $A_1$ 中元素，即 $a_{ii}^{(2)} < a_{ii},\ i=2,3,\cdots, n$.
+        \item [(4)] (2) 中我们已证明 $A_2$ 是对称正定阵，所以 $A_2$ 对角线元素大于 $0$，即 $ a_{ii}^{(2)} = a_{ii} - (a_{11})^{-1}a^2_{i1} > 0$, 于是有 $a_{i1}^2 < a_{11}\cdot a_{ii}$ 这说明 $a_{i1} < \max\{a_{11}, a_{ii}\}, \forall i \ne 1$， 说明第 $1$ 列的元素绝对值小于对角线元素绝对值的最大者。设 $P_{1k}$ 是交换第 $1$ 行(列)与 第 $k$ 行(列) 的初等置换矩阵，由于$A = Q\Lambda Q^\top$, $P_{1k}AP_{1k} = (P_{1k}Q)\Lambda(P_{1k}Q)^\top$, 所以 $P_{1k}AP_{1k}$ 也是对称正定矩阵，这就验证了 $A$ 的第$k$列元素绝对值小于对角线元素绝对值的最大者。
+        \item [(5)] 由 (4) 知，$\max _{2\leq i, j\leq n} |a_{ij}^{(2)}| = a^{(2)}_{kk}$，对于某一个 $k, 2\leq k\leq n$ 成立. $\max_{2\leq i, j\leq n} |a_{ij}| = a_{ll}$， 对于某一个 $l, 2\leq l\leq n$ 成立. 而由 (3) 知，$a_{kk}^{(2)} \leq a_{kk} \leq a_{ll}$. 这就证明了命题 (5)
+        \item [(6)] 可用数学归纳法证明，结论显然
+    \end{itemize}
+        
+    \end{spacing}
+
+    \item [8.] 习题8
+    
+    结论是显然的，但验证较为繁琐，这里方便起见，不妨假设 $i < j$, 对 $L_k$ 作分块:
+
+    $L_k = \left[L_{<k}, l_k, L_{k...i}, l_{i}, L_{i...j}, l_{j}, L_{>j}\right]$
+    其中 $l_k, l_i, l_j$ 是原矩阵的 $k,i,j$ 列，$L_{<k}, L_{k...i}, L_{i...j}, L_{>j}$ 是由上述三列分割而成的四块矩阵. $L_k I_{ij} = \left[L_{<k}, l_k, L_{k...i}, l_{j}, L_{i...j}, l_{i}, L_{>j}\right]$; 
+    
+    $\widetilde{L}_k = I_{ij}(L_kI_{ij}) = \left[I_{ij}L_{<k}, I_{ij}l_k, I_{ij}L_{k...i}, I_{ij}l_{j}, I_{ij}L_{i...j}, I_{ij}l_{i}, I_{ij}L_{>j}\right] = [L_{<k}, I_{ij}l_k, L_{k...i}, l_i, L_{i...j}, l_j, L_{>j}]$
+
+    所以 $\widetilde{L}_k$ 相较 $L_k$ 只有第 $k$ 列发生变化， $l_k \to I_{ij}l_{k}$. $l_k$ 中非零元出现在 $k$ 行以后，且 $l_{k,k} = 1$, 由于 $k <i < j$, 所以 $I_{ij}l_{k}$ 的非零元也出现在 $k$ 行以后，且 $(I_{ij}l_{k})_{k, k} = 1$. 所以 $\widetilde{L}_k$ 也是指标为 $k$ 的初等下三角阵。
+
+    \item [9.] 习题9
+    \begin{spacing}{1.5}
+    
+    $A = LU$ 其中 $L$ 是下三角阵， $U$ 是单位上三角阵，于是 $A^\star = U^\star L^\star$, 其中 $U^\star$ 是单位下三角阵， $L^\star$ 是上三角阵。可运用7.4.1部分的结论：
+    \begin{itemize}
+        \item [(1)] $(L^\star)_{1i} = (A^\star)_{1i}, 1\leq i \leq n$; $(U^\star)_{i1} = (A^\star)_{i1} / (L^\star)_{11}, i \geq 2$. 即：
+        
+        $l_{i1} = a_{i1}, i\geq 1$; $u_{1i} = a_{1i} / l_{11}, i\geq 2$.
+        \item [(2)] $(L^\star)_{ri} = (A^\star)_{ri} - \sum_{k=1}^{r-1} (U^\star)_{rk}(L^\star)_{ki}, i\geq r$; 即：
+        
+        $l_{ir} = a_{ir} - \sum_{k = 1}^{r - 1} l_{ik}u_{kr}, i\geq r$.
+
+        \item [(3)] $(U^\star)_{ir} = ((A^\star)_{ir} - \sum_{k=1}^{r-1}(U^\star)_{ik}(L^\star)_{kr}) / (L^\star)_{rr}, i > r$; 即：
+        
+        $u_{ri} = (a_{ri} - \sum_{k=1}^{r-1} l_{rk}u_{ki}) / l_{rr}, i > r$.
+    \end{itemize}
+
+    \item [10.] 习题11
+    
+    \begin{itemize}
+        \item [(1)] 对称正定矩阵 $A$ 是实正规矩阵，故可正交相似于对角矩阵, 即存在正交矩阵 $Q$, $A = Q\Lambda Q^\top$. $A^{-1} = (Q^\top)^{-1} \Lambda^{-1} Q^{-1} = Q\Lambda^{-1}Q^\top$, 其中 $\Lambda^{-1}$ 仍是对角矩阵，故 $A^{-1}$ 也是对称正交矩阵。
+        \item [(2)] $L$ 存在性: $A = Q\Lambda Q^\top = (Q\Lambda^{1/2}Q^\top) (Q\Lambda^{1/2}Q^\top)$. 注意到本题要证明的结论 $A = L^\top L$ 与 Cholesky 分解略不同，但基本思路是一致的。由于 $Q\Lambda^{1/2}Q^\top$ 满秩，故对其列向量组按照 $n\to 1$ 的顺序 作Schmidt正交化，可以得到分解 $Q\Lambda^{1/2}Q^\top =  Q^\prime L$, 其中 $Q^\prime$ 是列正交矩阵，$L$ 是对角线元素为正的下三角矩阵。从而有 $A = (Q^\prime L)^\top (Q^\prime L) = L^\top Q^{\prime\top} Q^\prime L = L^\top L$. 
+        
+        $L$ 唯一性: 考虑上述分解存在的必要条件，可按照 $k: n\to 1$ 的顺序计算: $l_{kk} = \sqrt{A_{kk} - \sum_{j=k+1}^n l_{jk}^2}$, $l_{ki} = \dfrac{A_{kk} - \sum_{j=k+1}^n l_{jk}l_{ji}}{l_{kk}}, \forall i < k$，由此知，如果该分解存在，则唯一
+    \end{itemize}
+
+    \item [11.] 习题12
+    
+    $$
+    \begin{array}{l}
+    \left[\begin{array}{cccc}
+        1/3 & -1/7 & -4/25 & -16/17 \\  & 3/7 & 12/25 & 13/17 \\  &  & -7/25 & -8/17 \\  & & & 5/17
+    \end{array}\right]
+    \left[\begin{array}{cccc}
+        1 & & &  \\ 1/3 &    1 &  & \\ -5/7 & -1/7 &  1 &  \\ -1/5 & 4/25 & -3/25 &    1
+    \end{array}\right]
+    \left[\begin{array}{cccc}
+        0 &    1 &    0 &    0 \\    0 &    0 &    1 &    0 \\    1 &    0 &    0 &    0 \\    0 &    0 &    0 &    1
+    \end{array}\right]
+    \left[\begin{array}{cccc}
+        2 &    1 &   -3 &   -1 \\    3 &    1 &    0 &    7 \\   -1 &    2 &    4 &   -2 \\    1 &    0 &   -1 &    5
+    \end{array}\right]\\
+    = E_4
+    \end{array}
+    $$
+    所以 $$
+    \begin{array}{ll}
+        A^{-1} &= \left[\begin{array}{cccc}
+        1/3 & -1/7 & -4/25 & -16/17 \\  & 3/7 & 12/25 & 13/17 \\  &  & -7/25 & -8/17 \\  & & & 5/17
+    \end{array}\right]
+    \left[\begin{array}{cccc}
+        1 & & &  \\ 1/3 &    1 &  & \\ -5/7 & -1/7 &  1 &  \\ -1/5 & 4/25 & -3/25 &    1
+    \end{array}\right]
+    \left[\begin{array}{cccc}
+        0 &    1 &    0 &    0 \\    0 &    0 &    1 &    0 \\    1 &    0 &    0 &    0 \\    0 &    0 &    0 &    1
+    \end{array}\right]\\
+    &= \dfrac{1}{85} \left[\begin{array}{cccc}
+        -4 &   50 &  -23 &  -80 \\   33 &  -30 &   41 &   65 \\  -19 &   25 &   -3 &  -40 \\   -3 &   -5 &    4 &   25
+    \end{array}\right]
+    \end{array}
+    $$
+    \end{spacing}
+
+    \item [12.] 习题13
+    
+    按照公式 $\alpha_1 = b_1, \beta_1 = c_1/b_1$, $\gamma_i = a_i, \alpha_i = b_i - a_i\beta_{i-1}, \beta_i = c_i/\alpha_i, i>1$ 计算：
+
+    $$
+    A = LU = 
+    \left[\begin{array}{ccccc}
+        2 & & & & \\
+        -1 & 3/2 & & & \\
+          & -1 & 4/3 & & \\
+          &    &  -1 & 5/4 & \\
+          &    &     &  -1 & 6/5 \\
+    \end{array}\right]
+    \left[\begin{array}{ccccc}
+        1 & -1/2 & & & \\
+          & 1  & -2/3 & & \\
+          &    & 1 & -3/4 & \\
+          &    &   & 1    & -4/5 \\
+          & & & & 1
+
+    \end{array}\right]
+    $$
+    $Ly = b$ $\Rightarrow$ $y = \left[\dfrac{1}{2},\dfrac{1}{3},\dfrac{1}{4},\dfrac{1}{5},\dfrac{1}{6}\right]^\top$,
+    $Ux = y \Rightarrow x = \left[\dfrac{5}{6},\dfrac{2}{3}, \dfrac{1}{2}, \dfrac{1}{3}, \dfrac{1}{6}\right]^\top$
+    
+    \item [13.] 习题15
+    
+    由于 $A$ 的某一顺序主子式 $\det(A_2) = 0$，故 $A$ 不能 LU分解；由于 $B$ 的某一顺序主子式 $\det(B_2) = 0$, 故 $B$ 不能 LU 分解； $C$ 的顺序主子式均非零，故有唯一的 LU 分解。
+
+    \item [14.] 习题16
+    
+    $\left[\begin{array}{ccc}0 & 3 & 4 \\ 1 & -1 & 1 \\ 2 & 1 & 2\end{array}\right]\left[\begin{array}{c}x_1\\x_2\\x_3\end{array}\right] = \left[\begin{array}{c}1\\2\\3\end{array}\right]$
+    交换 1， 3两行，消去第 1 列得：
+    $\left[\begin{array}{ccc}2&1&2\\0&-3/2&0\\0&3&4\end{array}\right]x = \left[\begin{array}{c}3\\1/2\\1\end{array}\right]$
+
+    交换 2， 3两行，消去第 2 列得：
+    $\left[\begin{array}{ccc}2&1&2\\0&3&4\\0&0&2\end{array}\right]x = \left[\begin{array}{c}3\\1\\1\end{array}\right]$
+
+    经过回代得到 $x = [x_1, x_2, x_3]^\top = \left[\dfrac{7}{6},-\dfrac{1}{3},\dfrac{1}{2}\right]^\top$
+
+    \item [15.] 习题17
+    \begin{spacing}{1.5}
+    首先我们归纳地证明带宽为$2t+1$的带状$n$阶方阵 $A_n$ 作LU分解 $A_n=L_nU_n$, 那么$L_n$,$U_n$也是带宽为$2t+1$ 的带状矩阵：
+    \begin{itemize}
+        \item [(i)] $n=1$ 时显然成立；
+        \item [(ii)] 对 $A_{n+1} = L_{n+1}U_{n+1}$ 作分块: $\left[\begin{array}{cc}a_{11} & A_{1,\geq2}\\A_{\geq2,1}&A_{n}\end{array}\right] = A_{n+1} = L_{n+1}U_{n+1} = \left[\begin{array}{cc}1&0\\L_{\geq2,1}&L_n\end{array}\right]\left[\begin{array}{cc}u_{11}&U_{1,\geq2}\\0&U_n\end{array}\right]$, 得到$n+1$阶带状方阵LU分解的必要条件：$u_{11} = a_{11}$, $U_{1,\geq 2} = A_{1,\geq 2}$, $L_{\geq 2, 1} = (u_{11})^{-1}A_{\geq 2,1}$, $A_n = L_nU_n$. 根据归纳假设 $L_n, U_n$ 都是带宽为 $2t+1$ 的带状矩阵; 因为 $A_{n+1}$ 是带宽为 $2t+1$ 的带状阵，所以 $U_{1,\geq2} = A_{1,\geq 2}$ 与 $L_{\geq 2, 1} = (u_{11})^{-1}A_{\geq 2,1}$ 的非零元都在前 $t$ 个分量。因此 $L_{n+1}$, $U_{n+1}$ 也是带宽为 $2t+1$ 的带状矩阵。
+    \end{itemize}
+    由于 $L_n$, $U_n$ 是带宽为 $2t+1$ 的带状三角阵，充分考虑非零元的位置，显然有：
+
+    对$i\geq r$, $a_{ri} = \sum_{k=1}^{n} l_{rk}u_{ki} = \sum_{k=\max(1,i-t)}^{r-1} l_{rk}u_{ki} + l_{rr}u_{ri}$, 而 $l_{rr}=1$, 所以 $u_{ri} = a_{ri} - \sum_{k=\max(1,i-t)}^{r-1} l_{rk}u_{ki}$.
+
+    对$i > r$, $a_{ir} = \sum_{k=1}^{n} l_{ik}u_{kr} = \sum_{k=\max(1, i-t)}^{r-1} l_{ik}u_{kr} + l_{ir}u_{rr}$, 所以 $l_{ir} = (a_{ir} - \sum_{k=\max(1, i-t)}^{r-1} l_{ik}u_{kr}) / u_{rr}$.
+    \end{spacing}
+
+    \item [16.] 习题19
+    
+    \begin{itemize}
+        \item [(1)] $||x||_\infty = \max_{i} |x_i| \leq \sum_{i} |x_i| = ||x||_1 \leq \sum_{i} \max_{k} |x_k| = n ||x||_\infty$
+        \item [(2)] 注意到 $A^\top A$ 是实对称矩阵，$A^\top A = Q\Lambda Q^\top$. $tr(A^\top A) = tr(Q\Lambda Q^\top) = tr(\Lambda Q^\top Q) = tr(\Lambda) = \sum_{i} \Lambda_{ii}$.
+        
+        $||A||_2^2 = \lambda_{max}(A^\top A) = \max_{k} \Lambda_{kk} \leq \sum_{i} \Lambda_{ii} = tr(A^\top A) = ||A||_F^2$. (因为 $A^\top A$ 特征值非负)
+
+        $||A||_F^2 = tr(A^\top A) = \sum_{i} \Lambda_{ii} \leq n \max_{k} \Lambda_{kk} = n ||A||_2^2$. 
+        
+        所以有 $\sqrt{1/n} \cdot ||A||_F \leq ||A||_2 \leq ||A||_F$
+
+    \end{itemize}
+    
+    \item [17.] 习题20
+    
+    \begin{itemize}
+        \item 正定: 由于 $||x||$ 是范数， 所以 $||x||_P = ||Px|| \geq 0$, 且 $||x||_P = ||Px|| = 0 \Rightarrow Px=0 \Rightarrow x = P^-1 0 = 0$.
+        \item 齐次: 由于 $||kx|| = |k|\cdot ||x||$, 所以  $||kx||_P = ||P(kx)|| = ||k(Px)|| = |k|\cdot ||Px||$.
+        \item 三角不等式: $||x+y|| \leq ||x|| + ||y||$, 所以有 $||x + y||_P = ||P(x + y)|| = ||(Px) + (Py)|| \leq ||Px|| + ||Py|| = ||x||_P + ||y||_P$. 
+    \end{itemize}
+    
+    \item [18.] 习题21
+    \begin{spacing}{1.25}
+    \begin{itemize}
+        \item 正定：由于 $A$ 正定，所以 $(Ax, x) = x^\top A x \geq 0$, $||x||_A = (Ax, x)^{1/2} \geq 0$, 且根据$A$正定的条件，当且仅当 $x=0$ 时取 等号.
+        \item 齐次：$(A(kx), kx) = k^2 x^\top A x = k^2 (Ax, x)$, 所以 $||kx||_A = (A(kx), kx)^{1/2} = |k|\cdot ||x||_A$.
+        \item 三角不等式：对称正定阵$A$做Cholesky分解: $A = LL^\top$, 由Cauchy-Schwarz不等式，有 $\forall x, y\in\mathbb{R}^{n}, \langle L^\top x, L^\top y\rangle \leq \sqrt{\langle L^\top x, L^\top x\rangle}\sqrt{\langle L^\top y, L^\top y\rangle}$, 展开有: 
+        $x^\top A y = x^\top LL^\top y \leq \sqrt{x^\top LL^\top x y^\top LL^\top y} = \sqrt{x^\top Axy^\top Ay}$. 所以 $(||x||_A + ||y||_A)^2 - ||x + y||_A^2 = 2\left(\sqrt{x^\top A x}\sqrt{y^\top A y} - x^\top A y\right) \geq 0$, 即 
+
+        $||x||_A + ||y||_A \geq ||x+y||_A$.
+    \end{itemize}
+    \end{spacing}
+    
+    \item [19.] 习题22
+    
+    $(||x||_2 + ||y||_2)^2 - ||x+y||_2^2 = 0 \Rightarrow 0 \leq \sqrt{x^\top x}\sqrt{y^\top y} = x^\top y$. 由Cauchy-Schwarz不等式知，上述等式成立当且仅当 $x$, $y$ 共线.
+
+    \item [20.] 习题24
+     
+    根据矩阵范数的定义即可得到：
+
+    $$||A||^\prime = \max_{x\ne 0} \dfrac{||Ax||^\prime}{||x||^\prime} = \max_{x\ne 0} \dfrac{||PAx||}{||Px||} = \max_{x\ne 0} \dfrac{||(PAP^{-1}) (Px)||}{||Px||} = ||PAP^{-1}||$$
+
+    \item [21.] 习题26
+    
+    可利用奇异值分解来证明：由于 $A\in\mathbb{R}^{n\times n}$，作奇异值分解 $A = Q_1 \left[\begin{array}{cc}\Lambda_r&0\\0&0\end{array}\right]_{n\times n}Q_2$, 其中 $Q_1, Q_2$ 均为$n$阶正交矩阵， $r = r(A) = r(A^\top) = r(AA^\top) = r(A^\top A)$. 所以有 
+    
+    $AA^\top = Q_1\left[\begin{array}{cc}\Lambda_r^2&0\\0&0\end{array}\right]_{n\times n}Q_1^\top$，$A^\top A = Q_2^\top \left[\begin{array}{cc}\Lambda_r^2&0\\0&0\end{array}\right]_{n\times n}Q_2$.
+
+    所以 $AA^\top$ 与 $A^\top A$ 正交相似，它们有相同的特征值。
+
+    \item [22.] 习题27
+    
+    根据矩阵范数定义 $||A^{-1}||_\infty = \max_{x\ne 0} \dfrac{||A^{-1}x||_\infty}{||x||_\infty}$, 因为 $A$ 可逆，令 $y = A^{-1} x\ne 0$, 即 $x = Ay$ 有：
+
+    $$||A^{-1}||_\infty = \max_{x\ne 0} \dfrac{||A^{-1}Ay||_\infty}{||Ay||_\infty} = \max_{y\ne 0} \dfrac{||y||_\infty}{||Ay||_\infty} = \min_{y\ne 0} \dfrac{||Ay||_\infty}{||y||_\infty}$$
+
+    \item [23.] 习题28
+    
+    $(A + \delta A)^{-1} = \left(A (E + A^{-1}\delta A)\right)^{-1} = (E + A^{-1}\delta A)^{-1} A^{-1}$. 因为 $A$ 非奇异，故只需要验证 $(E + A^{-1}\delta A)^{-1}$ 存在, 由书中定理 7.18 可以证明其存在性，因为 $||A^{-1}\delta A|| \leq ||A^{-1}||\cdot ||\delta A|| < 1$.
+
+    令 $\delta X = A^{-1} - (A + \delta A) ^{-1}$, 则由 $(A^{-1} - \delta X)(A + \delta A) = E$ 知：$\delta X = A^{-1}\delta A (A+\delta A)^{-1}$, 根据定理 7.18 $||(E + A^{-1} \delta A)^{-1}|| \leq \dfrac{1}{1 - ||A^{-1}\delta A||} \leq \dfrac{1}{1 - ||A^{-1}||\cdot ||\delta A||}$, 所以 
+
+    $$||\delta X|| \leq ||A^{-1}||\cdot ||\delta A|| \cdot ||A + \delta A|| \leq ||A^{-1}||\cdot ||\delta A|| \cdot ||(E + A^{-1}\delta A)^{-1}||\cdot ||A^{-1}||$$
+
+    所以 
+
+    $$\dfrac{||A^{-1} - (A + \delta A)^{-1}||}{||A^{-1}||} = \dfrac{||\delta X||}{||A^{-1}||} \leq ||A^{-1}||\cdot ||\delta A||\cdot \dfrac{1}{1 - ||A^{-1}||\cdot ||\delta A||} = \dfrac{\mathtt{cond}(A)\dfrac{||\delta A||}{||A||}}{1 - \mathtt{cond}(A)\dfrac{||\delta A||}{||A||}}$$
+
+    \item [24.] 习题30
+    \begin{spacing}{1.5}
+    \begin{itemize}
+        \item [(1)] $||A||_2 = \sqrt{\lambda_{\mathtt{max}} (A^\top A)} = \sqrt {\lambda_{\mathtt{max}}(LD^2L^\top)} = \sqrt{\max_{k} D_{kk}^2} = \max_{k} D_{kk}$, 类似地， $||A^{-1}||_2 = \min_{k} D_{kk}$. $||W||_2 = \sqrt{\lambda_{\mathtt{max}}(W^\top W)} = \sqrt{\lambda_{\mathtt{max}} (A)} = \sqrt{\lambda_{\mathtt{max}} (LDL^\top)} = \sqrt{\max_{k} D_{kk}}$, 类似地， $||W^{-1}||_2 = \sqrt{\min_{k} D_{kk}}$. 
+        所以 $\mathtt{cond}(A)_2 = ||A||_2||A^{-1}||_2 = ||W||_2^2||W^{-1}||_2^2 = \left[\mathtt{cond}(W)_2\right]^2$.
+        \item [(2)] $WW^\top = D^{1/2}L^\top LD^{1/2} = D$, 与 $W^\top W$ 正交相似，有相同的特征值，所以 $\mathtt{cond}(W^\top)_2 = \mathtt{cond}(W)_2$. 所以有 $\mathtt{cond}(A)_2 = \mathtt{cond}(W^\top)_2\mathtt{cond}(W)_2$.
+    \end{itemize}
+    \end{spacing}
+
+    \item [25.] 习题32
+    
+    显然有 $\mathtt{cond}(A)_2 = \sqrt{\lambda_{\mathtt{max}} (A^\top A)} / \sqrt{\lambda_{\mathtt{min}} (A^\top A)} = \sqrt{\lambda_{\mathtt{max}}(E)} / \sqrt{\lambda_{\mathtt{min}}(E)} = 1$.
+
+    \item [26.] 习题33
+    
+    $\mathtt{cond}(AB) = ||AB||\cdot ||(AB)^{-1}|| \leq ||A||\cdot ||B||\cdot ||B^{-1}|| \cdot ||A^{-1}|| = \mathtt{cond}(A) \cdot \mathtt{cond}(B)$.
+
+
+\end{itemize}
+
+\end{document}

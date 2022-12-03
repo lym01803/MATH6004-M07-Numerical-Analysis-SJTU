@@ -1,0 +1,184 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance,mathtools}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{setspace}
+%\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage{enumerate}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+\usepackage[ruled,lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{tikz}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewenvironment{solution}[1][Solution]{~\\ \textbf{#1.}}{~\\}
+
+\newcommand{\prob}{\mathtt{Pr}}
+
+\newcommand{\postscript}[2]
+    {\setlength{\epsfxsize}{#2\hsize}
+    \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+\SetKwFor{Function}{function}{:}{end}
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+
+\title{计算方法 作业2}
+\author{刘彦铭\ \ 学号:122033910081}
+\date{编辑日期:\ \today}
+
+\begin{document}
+
+\maketitle
+
+李庆杨等, 数值分析, 第5版, 华中科大, P.162, 1,3,5,6,7,9,10,11,14,15
+
+\begin{enumerate}
+\begin{spacing}{1.5}
+    
+    \item 习题1
+    
+    以下列出编程计算的中间过程：(区间 $[x_0, x_1]$ 中点 $m$)\\
+    x0 = 0.0, m = 1.0, x1 = 2.0, f(x0) = -1.0, f(m) = -1.0, f(x1) = 1.0 \\
+    x0 = 1.0, m = 1.5, x1 = 2.0, f(x0) = -1.0, f(m) = -0.25, f(x1) = 1.0 \\
+    x0 = 1.5, m = 1.75, x1 = 2.0, f(x0) = -0.25, f(m) = 0.3125, f(x1) = 1.0 \\
+    x0 = 1.5, m = 1.625, x1 = 1.75, f(x0) = -0.25, f(m) = 0.015625, f(x1) = 0.3125 \\
+    x0 = 1.5, m = 1.5625, x1 = 1.625, f(x0) = -0.25, f(m) = -0.12109375, f(x1) = 0.015625 \\
+    x0 = 1.5625, m = 1.59375, x1 = 1.625, f(x0) = -0.12109375, f(m) = -0.0537109375, f(x1) = 0.015625 \\
+    final: x0 = 1.59375, x1 = 1.625 \\
+    得到误差不超过$0.05$的近似解 $x=1.625$
+
+    \item 习题3
+    \begin{itemize}
+        \item [(1)] $\phi(x) = 1 + \dfrac{1}{x^2}$, $\phi^\prime(x) = -\dfrac{2}{x^3}$, $|\phi^\prime(x^*)|<1$, 收敛；
+        \item [(2)] $\phi(x) = (1 + x^2)^{1/3}$, $\phi^\prime(x) = \dfrac{2}{3}x(1+x^2)^{-2/3}$, $|\phi^\prime(x^*)| < 1$, 收敛；
+        \item [(3)] $\phi(x) = (x - 1)^{-1/2}$, $\phi^\prime(x) = -\dfrac{1}{2}(x - 1)^{-3/2}$, $|\phi^\prime(x^*)| > 1$, 不收敛.
+    \end{itemize}
+    选取(1)来计算，粗略估根 $x^*\in[1.4, 1.5]$, $|\phi^\prime(x)| < 0.75$. 取 $x_0 = 1.5$ 得到 $x_1 = 1.4444\dots$, 
+    由 $|x_k - x^*| \leq \dfrac{L^k}{1-L}\times |x_1 - x_0| < \dfrac{0.75^k}{1-0.75}\times 0.1$ 知，当$k$足够大(比如取$30$)时，能保证误差限
+    小于$5\times10^{-4}$, 从而保证4位有效数字。计算得到 $x = 1.466$ .
+
+    \item 习题5
+    
+    迭代方程 $x = \phi(x) = x - \lambda f(x)$, $ 1 - \lambda M< \phi^\prime(x) = 1 - \lambda f^\prime(x) < 1$, 故 $|\phi^\prime(x)| \leq \max\{1, |1 - \lambda M|\}$. 
+    由于 $0 < \lambda M < 2$，故 $|\phi^\prime(x)|<1$, 迭代过程收敛。
+
+    \item 习题6 
+    
+    \begin{itemize}
+        \item [(1)] 可化为 $x = \phi^{-1}(x)$ 的形式，有 $|\phi^{-1\prime}(x)| \leq 1/k < 1$, 收敛，适于迭代；
+        \item [(2)] $x = \tan x$ $\to$ $x = \arctan x + k\pi, k\in\mathbb{Z}$. 计算 $4.5$ 附近的根，取$k=1$, 迭代得: $x=4.4934$
+    \end{itemize}
+    
+    \item 习题7 
+    \begin{itemize}
+        \item [Newton法]: $x_{k+1} = x_k - \dfrac{x_k^3 - 3x_k - 1}{3x_k^2-3}, x_0 = 2$. 编程计算得: 
+        
+        x0 = 2.0, x1 = phi(x0) = 1.8888888888888888\\
+        x0 = 1.8888888888888888, x1 = phi(x0) = 1.879451566951567\\
+        x0 = 1.879451566951567, x1 = phi(x0) = 1.879385244836671\\
+        x0 = 1.879385244836671, x1 = phi(x0) = 1.8793852415718169\\
+        取根为 $x = 1.879$
+
+        \item [弦截法]: $x_{k+1} = x_{k} - \dfrac{f(x_k)}{f[x_k, x_{k-1}]}$, $f[x_k, x_{k-1}]$表示差商。$x_0=2, x_1=1.9$, 编程计算得:
+        
+        x0 = 2.0, x1 = 1.9, f(x0) = 1.0, f(x1) = 0.1589999999999998, f[x0, x1] = 8.409999999999995, x2 = 1.8810939357907253\\
+        x0 = 1.9, x1 = 1.8810939357907253, f(x0) = 0.1589999999999998, f(x1) = 0.012996163275849959, f[x0, x1] = 7.722592873271078, x2 = 1.8794110601699177\\
+        x0 = 1.8810939357907253, x1 = 1.8794110601699177, f(x0) = 0.012996163275849959, f(x1) = 0.00019612871434127044, f[x0, x1] = 7.606049076500403, x2 = 1.879385274283925\\
+        x0 = 1.8794110601699177, x1 = 1.879385274283925, f(x0) = 0.00019612871434127044, f(x1) = 2.4848990243242497e-07, f[x0, x1] = 7.596412413152335, x2 = 1.8793852415724437\\
+        取根为 $x = 1.879$
+
+        \item [抛物线法]: $x_{k+1} = x_k - \dfrac{2f(x_k)}{\omega\pm\sqrt{\omega^2-4f(x_k)f[x_k,x_{k-1},x_{k-2}]} }$, 其中 $\omega = f[x_k,x_{k-1}] + f[x_k, x_{k-1}, x_{k-2}](x_k - x_{k-1})$.
+        每次选取距离 $x_k$ 最近的根。初始选取 $x_0 = 1, x_1 = 3, x_2 = 2$, 编程计算部分过程展示如下: 
+
+        x0 = 1.0, x1 = 3.0, x2 = 2.0, f210 = 6.0 x31 = 1.8931498239234457, x32 = 0.4401835094098867, x3 = 1.8931498239234457\\
+        x0 = 3.0, x1 = 2.0, x2 = 1.8931498239234457, f210 = 6.893149823923446 x31 = 1.879135257176037, x32 = 0.7997197788090766, x3 = 1.879135257176037\\
+        x0 = 2.0, x1 = 1.8931498239234457, x2 = 1.879135257176037, f210 = 5.772285081099343 x31 = 1.8793852962191757, x32 = 0.5636774675422187, x3 = 1.8793852962191757\\ 
+        取根为 $x = 1.879$
+
+    \end{itemize}
+    
+    \item 习题9 
+
+    由均值不等式 $x_k = \dfrac{1}{2}\left(x + \dfrac{a}{x}\right)\geq \sqrt a$. 所以 $x_{k+1} = \dfrac{1}{2}\left(x_k + \dfrac{a}{x_k}\right) \leq \dfrac{1}{2}\left(x_k + x_k\right) = x_k$.
+    所以 $x_1, x_2, \cdots$ 单调递减（不增，如果有某个 $x_k=\sqrt a$, 那么后续都会等于该值）
+
+    \item 习题10
+    
+    $x_{k+1} - x_{k} = -\dfrac{f(x_k)}{f^\prime(x_k)}$, $R_{k+1}=\dfrac{x_{k+1}-x_k}{(x_k-x_{k-1})^2}=-\dfrac{f(x_k)}{f^\prime(x_k)}\times\dfrac{f^{\prime 2}(x_{k-1})}{f^2(x_{k-1})}=-\dfrac{f^{\prime2}(x_{k-1})}{f^\prime(x_k)}\times\dfrac{f(x_k)}{f^2(x_{k-1})}$
+
+    记 $e_k = x_k - x^*$, $\phi(x) = x - \dfrac{f(x)}{f^\prime(x)}$, 有 $e_k = \phi^\prime(x^*)e_{k-1} + \dfrac{\phi^{\prime\prime}}{2}(x^*)e_{k-1}^2+o(e_{k-1}^2)$, 其中 $\phi^\prime(x^*) = 0$, $\phi^{\prime\prime}(x^*) = \dfrac{f^{\prime\prime}(x^*)}{f^\prime(x^*)}$
+    故而 $e_k = \dfrac{f^{\prime\prime}(x^*)}{2f^\prime(x^*)}e_{k-1}^2+o(e_{k-1}^2)$
+    
+    所以$\dfrac{f(x_k)}{f^2(x_{k-1})} = \dfrac{f^\prime(x^*)e_k + o(e_k)}{f^{\prime2}(x^*)e_{k-1}^2+o(e_{k-1}^2)}=\dfrac{f^\prime(x^*)\dfrac{f^{\prime\prime}(x^*)}{2f^\prime(x^*)}e_{k-1}^2 + o(e_{k-1}^2)}{f^{\prime2}(x^*)e_{k-1}^2+o(e_{k-1}^2)}=\dfrac{f^{\prime\prime}(x^*)+o(1)}{2f^{\prime2}(x^*) + o(1)}$
+
+    所以 $\lim_{k\to\infty} R_k = \lim_{k\to\infty} R_{k+1} = \lim_{k\to\infty} -\dfrac{f^{\prime2}(x_{k-1})}{f^\prime(x_k)} \times \dfrac{f^{\prime\prime}(x^*)+o(1)}{2f^{\prime2}(x^*) + o(1)} = -\dfrac{f^{\prime\prime}(x^*)}{2f^\prime(x^*)}$
+
+    \item 习题11
+    
+    \begin{itemize}
+        \item [(1)] 由于对称性，可只考虑大于等于0部分的情况，$x\geq 0, \phi(x) = x - \dfrac{f(x)}{f^\prime(x)} = x - \dfrac{x^{1/2}}{\dfrac{1}{2}x^{-1/2}}=-x$
+        
+        $\phi^\prime(x)=-1, x\geq 0$. $x < 0$ 时也有同样的结论。所以，该迭代过程不收敛。
+
+        \item [(2)] $x\geq 0$时，有 $\phi(x) = x - \dfrac{f(x)}{f^\prime(x)} = x - \dfrac{x^{3/2}}{\dfrac{3}{2}x^{1/2}} = \dfrac{1}{3}x$, $\phi^\prime(x) = \dfrac{1}{3}$. 对 $x<0$ 的情形，也有 $\phi^\prime(x)=\dfrac{1}{3}$.
+
+        故该迭代过程收敛，收敛速度为线性收敛。
+
+    \end{itemize}
+
+    \item 习题14
+    
+    \begin{itemize}
+        \item [(1)] $f(x) = x^n - a$, 迭代公式: $\phi(x) = x - \dfrac{f(x)}{f^\prime(x)} = x - \dfrac{x^n-a}{nx^{n-1}}$, $x_{k+1} = \phi(x_k)$. 
+        
+        令 $e_k = x_k - x^* = x_k - \sqrt[n]{a}$, $e_{k+1} = x_{k+1} - x^* = \phi(x_k) - \phi(x^*) = \phi^\prime(x^*)e_k+\dfrac{\phi^{\prime\prime}(x^*)}{2}e_k^2+o(e_k^2)$
+
+        $\phi^\prime = \dfrac{ff^{\prime\prime}}{f^{\prime2}}, \phi^{\prime\prime} = \dfrac{f^{\prime\prime}f^{\prime2}+ff^\prime f^{\prime\prime\prime}-2ff^{\prime\prime2}}{f^{\prime3}}$, 由于 $f(x^*)=0$, $\phi^\prime(x^*)=0$, $\phi^{\prime\prime}(x^*)=\dfrac{f^{\prime\prime}(x^*)}{f^\prime(x^*)}\ne0$
+
+        所以 $\lim_{k\to\infty} \dfrac{\sqrt[n]{a} - x_{k+1}}{(\sqrt[n]{a} - x_k)^2} = \lim_{k\to\infty}-\dfrac{e_{k+1}}{e_k^2} = -\dfrac{f^{\prime\prime}(x^*)}{2f^\prime(x^*)}=-\dfrac{n-1}{2\sqrt[n]{a}}$
+
+        \item [(2)] $f(x) = 1 - ax^{-n}$, 迭代公式: $\phi(x) = x - \dfrac{f(x)}{f^\prime(x)} = x - \dfrac{1-ax^{-n}}{anx^{-n-1}}=\dfrac{n+1}{n}x - \dfrac{1}{an}x^{n+1}$.
+        同(1), $f(x^*)=0, \phi^\prime(x^*)=0, \phi^{\prime\prime}(x^*)=-\dfrac{n+1}{a}x^{*n-1}=-\dfrac{n+1}{\sqrt[n]{a}}$
+        
+        所以 $\lim_{k\to\infty}\dfrac{\sqrt[n]{a} - x_{k+1}}{(\sqrt[n]{a} - x_k)^2} = -\dfrac{\phi^{\prime\prime}(x^*)}{2}=\dfrac{n+1}{2\sqrt[n]{a}}$
+    \end{itemize}
+
+    \item 习题15
+    
+    迭代公式 $x_{k+1} = \phi(x_k)$, $\phi(x) = \dfrac{x(x^2+3a)}{3x^2+a}$, 令 $e_{k} = x_k - x^* = x_k - \sqrt a$. 
+
+    计算得 $\phi^\prime = \dfrac{3(x^2-a)^2}{(3x^2+a)^2}, \phi^\prime(\sqrt a)=0, \phi^{\prime\prime}=\dfrac{48ax(x^2-a)}{(3x^2+a)^3}, \phi^{\prime\prime}(\sqrt a) = 0$.
+
+    $\phi^{\prime\prime\prime}(x^*)=\lim_{x\to\sqrt a}\dfrac{\phi^{\prime\prime}(x) - \phi^{\prime\prime}(\sqrt a)}{x-\sqrt a} = \lim_{x\to\sqrt a} \dfrac{48ax(x+\sqrt a)}{(3x^2+a)^3}=\dfrac{3}{2a}\ne 0$.
+
+    这就证明了该迭代过程是三阶收敛的方法。且 
+    
+    $\lim_{k\to\infty} \dfrac{\sqrt a - x_{k+1}}{(\sqrt a - x_k)^3}=\lim_{k\to\infty}\dfrac{-e_{k+1}}{-e_k^3}=\dfrac{\phi^{\prime\prime\prime}(x^*)}{6}=\dfrac{1}{4a}$
+
+\end{spacing}
+\end{enumerate}
+
+\end{document}

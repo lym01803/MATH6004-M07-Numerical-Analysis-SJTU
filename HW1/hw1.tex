@@ -1,0 +1,114 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance,mathtools}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{setspace}
+%\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage{enumerate}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+\usepackage[ruled,lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{tikz}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewenvironment{solution}[1][Solution]{~\\ \textbf{#1.}}{~\\}
+
+\newcommand{\prob}{\mathtt{Pr}}
+
+\newcommand{\postscript}[2]
+    {\setlength{\epsfxsize}{#2\hsize}
+    \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+\SetKwFor{Function}{function}{:}{end}
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+
+\title{计算方法 作业1}
+\author{刘彦铭\ \ 学号:122033910081}
+\date{编辑日期:\ \today}
+
+\begin{document}
+
+\maketitle
+
+李庆杨等, 数值分析, 第5版, 华中科大, P.12, 1,2,4,5,10,11,13,14
+
+\begin{enumerate}
+    \item Page12 习题1
+    
+    $\ln (x^*) - \ln (x) = \ln \left(1 + \dfrac{x^*-x}{x}\right) = \ln (1 + \delta) = \ln (1) + \delta + O(\delta^2) $.
+    忽略二阶以上的项，误差为 $\delta$ .
+
+    \item Page12 习题2
+    
+    $\dfrac{(x^*)^n - x^n}{x^n} = \left(\dfrac{x^*}{x}\right)^n - 1 = \left(1 + \dfrac{x^*-x}{x}\right)^n - 1$.
+    记 $\delta = \dfrac{x^*-x}{x} = 2\%$, 有：
+    
+    $(1+\delta)^n - 1 = n\cdot \delta + O(\delta ^ 2)$ 忽略二阶以上的项，可得相对误差为 $n\cdot\delta$, 即 $0.02n$ .
+
+    \item Page12 习题4
+    
+    \begin{enumerate}
+        \item [(1)] $|e^*(x_1^*+x_2^*+x_4^*)| \leq  |e_1^*| + |e_2^*| + |e_4^*| \leq 0.5\times 10^{-4} + 0.5 \times 10 ^{-3} + 0.5 \times 10 ^{-3} = 1.05\times 10^{-3}$
+        \item [(2)] $|e^*(x_1^*x_2^*x_3^*)| \leq |e_1^*x_2^*x_3^*| + |x_1^*e_2^*x_3^*| + |x_1^*x_2^*e_3^*| \leq 0.2148$
+        \item [(3)] $\left|e^*\left(\dfrac{x_2^*}{x_4^*}\right)\right| \leq \left|\dfrac{e_2^*}{x_4^*}\right| + \left|\dfrac{x_2^*e_4^*}{(x_4^*)^2}\right| \leq 8.866 \times 10^{-6}$
+    \end{enumerate}
+
+    \item Page12 习题5
+
+    $\dfrac{V^*-V}{V} = \dfrac{(R^*)^3 - R^3}{R^3} = \left(\dfrac{R^*-R}{R} + 1\right) ^ 3 - 1 = 3\cdot\dfrac{R^*-R}{R} + O\left(\left(\dfrac{R^*-R}{R}\right)^2\right)$
+
+    忽略二阶以上的项，所以半径的相对误差限应该为 $|\dfrac{R^*-R}{R}|\leq \dfrac{1}{3}\times 1\% = 0.33\%$
+
+    \item Page12 习题10 
+    
+    绝对误差 $s^* - s = g\cdot t\cdot e_t^* + O((e_t^*)^2)$. 绝对误差关于 $t$ 递增；
+
+    相对误差 $\dfrac{s^* - s}{s} = \dfrac{g}{t}\cdot e_t^* + O((e_t^*)^2)$. 相对误差关于 $t$ 递减。
+
+    \item Page12 习题11 
+    
+    $y_n = 10 y_{n-1} - 1 \Rightarrow e_n = 10 e_{n-1} \Rightarrow e_{10} = 10 ^ {10} \cdot e_{0} = 1.41\times 10 ^ {10}$. 该计算过程不稳定。
+
+    \item Page12 习题13
+    
+    $f(30) \approx -4.094 $
+
+    考虑 $f(x) = \ln(x - \sqrt{x^2 - 1})$ 求 $f(30)$ 时的误差, 由于$30$是整数，在常见计算机系统上没有浮点误差，故而误差来源于 $\sqrt{x^2-1}$ 的开平方操作。设这一误差为 $e$ .
+
+    则计算 $f(30)$ 时的误差估计为 $\dfrac{e}{x-\sqrt{x^2-1}} = (x + \sqrt{x^2-1})e \approx 60 e$.
+
+    而使用 $-\ln(x+\sqrt{x^2-1})$ 计算 $f(30)$ 时的误差估计为 $\dfrac{e}{x+\sqrt{x^2-1}} \approx \dfrac{e}{60}$.
+
+
+    \item Page12 习题14
+    
+    解为 $\left\{\begin{array}{l} x_1 = \dfrac{10^{10}}{10^{10} - 1} \\ x_2 = \dfrac{10^{10} - 2}{10^{10} - 1} \end{array}\right.$
+    假定只用三位数计算，消元中计算 $10^{10}-1$, $10^{10}-2$ 时会对阶，得到 $10^{10}$ 导致``大数吃掉小数''，从而得到
+    $x_1=x_2=1$的解。虽然在本例中解的误差很小，但这种计算不可靠。
+
+\end{enumerate}
+
+\end{document}

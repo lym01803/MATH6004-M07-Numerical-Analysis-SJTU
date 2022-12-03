@@ -1,0 +1,190 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance,mathtools}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{setspace}
+%\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage{enumerate}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+\usepackage[ruled,lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{tikz}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewenvironment{solution}[1][Solution]{~\\ \textbf{#1.}}{~\\}
+
+\newcommand{\prob}{\mathtt{Pr}}
+
+\newcommand{\postscript}[2]
+{\setlength{\epsfxsize}{#2\hsize}
+\centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+\SetKwFor{Function}{function}{:}{end}
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+
+\title{计算方法\ 作业5}
+\author{刘彦铭\ \ ID: 122033910081}
+\date{Last Edited:\ \today}
+
+\begin{document}
+
+\maketitle
+
+李庆杨等, 数值分析, 第5版, 华中科大, P.43,
+1,2,5,6,7,11,12,14,16,17,18,19,21,23,25
+
+\begin{spacing}{1.5}
+\begin{itemize}
+    \item [1.] 习题1
+    
+    对行列式按最后一行展开，有 $V_n(x) = \sum_{k=0}^{n} x^k \cdot M_{n+1,k+1}$, 其中 $M_{n+1, k+1}$ 是元素 $V_{n+1,k+1}$ 的代数余子式。显然这是一个 $n$ 次多项式，且 $n$ 次项系数非零当且仅当 $x_0,\cdots, x_{n-1}$ 互异。 用数学归纳法可以证明，Vandermonde 行列式 $\forall n\in\mathbb{N}^\star, V_n(x_0, x_1, \cdots, x_n) = \prod_{0\leq i < j \leq n} (x_j - x_i)$. 所以有 
+
+    $\begin{array}{ll}V_n(x) = V_n(x_0,\cdots,x_{n-1}, x) &= \prod_{0\leq i < j \leq n-1} (x_j - x_i) \prod_{0\leq i \leq n-1} (x - x_i) \\ &= V_{n-1}(x_0,\cdots, x_{n-1}) (x-x_0)(x-x_1)\cdots(x-x_{n-1})\end{array}$
+
+    由此知 $x_0, x_1, \cdots, x_{n-1}$ 是 $V_n(x)$ 的根。
+
+    \item [2.] 习题2
+    
+    $\begin{array}{ll}f(x) &= f(x_1)l_1(x) + f(x_2)l_2(x) + f(x_3)l_3(x) = -3\cdot\dfrac{(x-1)(x-2)}{(-1-1)(-1-2)} + 4\cdot\dfrac{(x-1)(x+1)}{(2-1)(2+1)} \\ &= \dfrac{5}{6}x^2 + \dfrac{3}{2}x - \dfrac{7}{3} \end{array}$
+
+    \item [3.] 习题5
+    
+    $l_2(x) = \dfrac{(x - x_0)(x - x_1)(x - x_3)}{(x_2 - x_0)(x_2 - x_1)(x_2 - x_3)} = -\dfrac{1}{2h^3}(x - x_0)(x - x_0 - h)(x - x_0 - 3h)$.
+
+    令 $t = x - x_0$, 考虑 $f(t) = t(t-h)(t-3h)$ 在 $(0, 3h)$ 上的两个极值, $f^\prime(t) = 3t^2 - 8ht + 3h^2$, 两个极值点分别为 $t_1 = \dfrac{4-\sqrt{7}}{3}h$ 与 $t_2 = \dfrac{4+\sqrt{7}}{3}h$, 代入有 $f(t_1) = \dfrac{-20 + 14\sqrt{7}}{27}h^3$, $f(t_2) = -\dfrac{20+14\sqrt{7}}{27}h^3$. 所以有 $\max_{x_0\leq x\leq x_3} |l_2(x)| = \dfrac{20+14\sqrt{7}}{27}h^3\cdot \dfrac{1}{2h^3}= \dfrac{10 + 7\sqrt{7}}{27}$.
+
+    \item [4.] 习题6
+    
+    \begin{itemize}
+        \item [(1)] 设 $f(x) = \sum_{j=0}^{n} x_j^k l_j(x)$, 显然 $f(x)$ 是一个 $n$ 次多项式。且有 $f(x_i) = \sum_{j=0}^n x_{j}^{k} l_j(x_i) = \sum_{j=0}^n x_j^k \delta_{ij} = x_i^k, \forall i\in\{0,1,\cdots, n\}$. 由于 $x_i$ 互异，满足上述条件的$n$次多项式有且仅有 $x^k$ 这一个, 所以 $f(x)\equiv x^k$.
+        \item [(2)] 利用(1)中的结果，当 $k\in\{1,2,\cdots,n\}$ 时, 有 
+        
+        $$\begin{array}{ll}
+        \sum\limits_{j=0}^n (x_j - x)^k l_j(x) &= \sum\limits_{j=0}^n \sum\limits_{i=0}^k \binom{k}{i} (-x)^{k-i} x_j^i l_j(x) \\&= \sum\limits_{i=0}^k \binom{k}{i}(-x)^{k-i}\sum\limits_{j=0}^n x_j^il_j(x)\\&= \sum\limits_{i=0}^k \binom{k}{i}(-x)^{k-i} x^i \\ &= (x - x)^k = 0
+        \end{array}$$
+
+    \end{itemize}
+
+    \item [5.] 习题7
+    
+    对 $f$ 在 做线性插值，得到 $L(x) = 0$. 由线性插值的误差分析可知，当 $x\in[a,b]$ 时，有 $f(x) = f(x) - L(x) = \dfrac{1}{2}f^{(2)}(\xi )(x-a)(x-b)$. 所以 $|f(x)|\leq \dfrac{1}{2}|(x-a)(x-b)| |f^{(2)}(\xi)| \leq \dfrac{1}{8}(b-a)^2\max\limits_{a\leq x \leq b} |f^{(2)}(x)|$ .
+
+    \item [6.] 习题11 
+    
+    $$\begin{array}{ll}
+        \Delta(f_kg_k) &= f_{k+1}g_{k+1} - f_kg_k \\&= f_{k+1}g_{k+1} - f_kg_{k+1} + f_{k}g_{k+1} - f_kg_k\\&=(f_{k+1} - f_k)g_{k+1} + f_k(g_{k+1} - g_k) \\&= g_{k+1}\Delta f_k + f_k\Delta g_{k}
+    \end{array}$$
+
+    \item [7.] 习题12
+    
+    $$\begin{array}{ll}
+    \sum\limits_{k=0}^{n-1} f_k\Delta g_k &= \sum\limits_{k=0}^{n-1} f_kg_{k+1} - f_kg_k\\&= \sum\limits_{k=0}^{n-1} f_kg_{k+1} - f_{k+1}g_{k+1} + f_{k+1}g_{k+1} - f_kg_k \\&= \sum\limits_{k=0}^{n-1} -g_{k+1}\Delta f_k + \sum\limits_{k=0}^{n-1} f_{k+1}g_{k+1} - f_kg_k\\ &= -\sum\limits_{k=0}^{n-1} g_{k+1}\Delta f_k + f_ng_n - f_0g_0
+    \end{array}$$
+
+    \item [8.] 习题14 
+    
+    $f(x) = a_n\prod_{i=1}^n (x-x_i)$, 对于任意 $x_i, i\in\{1,2,\cdots, n\}$, $f^\prime(x_i):=\lim_{x\to x_i}\dfrac{f(x) - f(x_i)}{x - x_i} = a_n\prod_{j\ne i} (x_i - x_j)$. 记 $V_n(x_1, x_2, \cdots, x_n)$ 表示Vandermonde行列式，
+
+    $$\begin{array}{ll}
+    \sum\limits_{j=1}^{n} \dfrac{x_j^k}{f^\prime(x_j)} &= \sum\limits_{j=1}^n \dfrac{x_j^k}{a_n\prod_{j\ne i} (x_i - x_j)}\\&= a_n^{-1}\sum_{j=1}^n \dfrac{x_j^k (-1)^{n-j} V_{n-1}(x_1, \cdots, x_{j-1}, x_{j+1}, \cdots, x_n)}{V_n(x_1, x_2, \cdots, x_n)}\\ &= a_n^{-1} V_n(x_1,x_2,\cdots, x_n)^{-1} \left|\begin{array}{ccccc}1&x_1&\cdots&x_1^{n-2}&x_1^k\\1&x_2&\cdots&x_2^{n-2}&x_2^k\\\vdots&\vdots&\ddots&\vdots&\vdots\\1&x_n&\cdots&x_n^{n-2}&x_n^k\end{array}\right|\\&=\left\{\begin{array}{ll}0,&0\leq k\leq n-2;\\a_n^{-1},&k=n-1.\end{array}\right. 
+    \end{array}$$
+    其中，第二个等号是由通分得到，第三个等号是由行列式按最后一列展开得到。
+
+    \item [9.] 习题16
+    
+    $f[2^0, 2^1, \cdots, 2^7] = \dfrac{f^{(7)}(\xi)}{7!} = \dfrac{7!}{7!} = 1$, 其中 $\xi\in[1, 2^7]$.
+
+    $f[2^0, 2^1, \cdots, 2^8] = \dfrac{f^{(8)}(\xi)}{8!} = 0$, 其中 $\xi\in[1, 2^8]$.
+
+    \item [10.] 习题17
+    
+    完全类同 Lagrange 插值误差的证明，由于设 $L_3(x)$ 是两点三次Hermite插值， 则$R_3(x) = f(x) - L_3(x)$ 在 $x_k,x_{k+1}$ 处分别有至少两重零点，即 $R_3(x) = K(x)(x-x_k)^2(x - x_{k+1})^2$. 
+    
+    固定 $x$ ($x$ 异于 $x_k, x_{k+1}$), 令 $\phi(t) = f(t) - L_3(t) - K(x)(t-x_k)^2(t-x_{k+1})^2$. $\phi$ 在 [$x_k, x_{k+1}]$ 上有 $x_k, x_{k+1}, x$ 三个不同零点。故根据微分中值定理知，$\phi^\prime$ 在 $(x_k, x)$, $(x_, x_{k+1})$ 上各有一个零点。而根据 Hermite插值条件有 $\phi^\prime(x_k) = \phi^\prime(x_{k+1}) = 0$, 故 $\phi^\prime$ 在 $[x_k, x_{k+1}]$ 上有四个不同的零点。对$\phi^\prime$连续使用三次微分中值定理，可知存在 $\xi\in(x_k, x_{k+1})$ 使得 $0=\phi^{(4)}(\xi) = f^{(4)}(\xi) - K(x)\cdot 4!$, 整理得到 $K(x) = \dfrac{f^{(4)}(\xi)}{4!}$, 从而 $R_3(x) = \dfrac{f^{(4)}(\xi)(x-x_k)^2(x-x_{k+1})^2}{4!}$. 
+
+    对于分段三次Hermite插值，若分段区间的最大长度是 $I$, 那么其误差限为 $\dfrac{1}{4!}\times \dfrac{I^4}{2^4}\times \sup\limits_{x_0<x<x_n} |f^{(4)}(x)|$.
+
+    \item [11.] 习题18
+    
+    实在是没看明白这道题想要表达什么。
+
+    \item [12.] 习题19
+    
+    直接待定系数求解即可 $P(x) = ax^4 + bx^3 + cx^2 + dx + e$, 
+
+    $\left\{\begin{array}{l}P(0) = e = 0\\ P^\prime(0) = d = 0\\P(1) = a + b + c + d + e = 1\\ P^\prime(1) = 4a + 3b + 2c + d = 1\\P(2) = 16a + 8b + 4c + 2d + e = 1\end{array}\right.$, $a = \dfrac{1}{4}, b=-\dfrac{3}{2}, c=\dfrac{9}{4}, d=e=0$. 即 $P(x) = \dfrac{1}{4}x^4 - \dfrac{3}{2}x^3 + \dfrac{9}{4}x^2$.
+
+    \item [13.] 习题21 
+    
+    按照 $(x_0, x_1) = (-5, -4), (x_1, x_2) = (-4, -3), \cdots, (x_9, x_{10}) = (4, 5)$ 进行分段, 当 $x_k\leq x \leq x_{k+1}$ 时，$I_h(x) = \dfrac{1}{1+x_k^2}\cdot\dfrac{x - x_{k+1}}{x_k - x_{k+1}}+\dfrac{1}{1+x_{k+1}^2}\cdot\dfrac{x - x_k}{x_{k+1} - x_k}$. 列出各区间中点处的函数值与插值多项式的值：
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{ccccccccccc}
+            \hline 
+            $x$ & -4.5 & -3.5 & -2.5 & -1.5 & -0.5 & 0.5 & 1.5 & 2.5 & 3.5 & 4.5 \\
+            \hline 
+            $f(x)$ & 0.0471 & 0.0755 & 0.1379 & 0.3077 & 0.8000  &      0.8000
+            & 0.3077 & 0.1379 & 0.0755 & 0.0471\\
+            $I_h(x)$ & 0.0486 & 0.0794 & 0.1500  &     0.3500 &      0.7500 &      0.7500&
+            0.3500 &      0.1500  &     0.0794 & 0.0486\\
+            \hline
+            
+        \end{tabular}
+    \end{table}
+
+    误差不超过 $0.05$
+
+    \item [14.] 习题23
+    
+    对 $f(x)=x^4$ 在 $[a,b]$ 上作分段三次Hermite插值，$x_0 = a$, $x_n = b$, $x_{k+1} = x_k + h$. 设插值函数为 $I_h(x)$, 则当 $x_k<x<x_{k+1}$ 时, $I_h(x) = H_3(x) = f(x_k)\alpha_k(x) + f(x_{k+1})\alpha_{k+1}(x) + f^\prime(x_k)\beta_k(x) + f^\prime(x_{k+1})\beta_{k+1}(x) = x_k^4\left(1+2\dfrac{x-x_k}{h}\right)\left(\dfrac{x-x_{k+1}}{h}\right)^2 + x_{k+1}^4\left(1-2\dfrac{x-x_{k+1}}{h}\right)\left(\dfrac{x-x_k}{h}\right)^2+4x_k^3(x-x_k)\left(\dfrac{x - x_{k+1}}{h}\right)^2 + 4x_{k+1}^3(x - x_{k+1})\left(\dfrac{x-x_k}{h}\right)^2$.
+    
+    由于 $|f^\prime(x_k)| = |4x_k^3| \leq 4 \max\{|a|, |b|\}^3$
+    误差限 $|f(x) - I_h(x)| \leq \sup\limits_{|x_1-x_2|<h} |f(x_1) - f(x_2)| + \dfrac{8}{27} h\cdot 4\max\{|a|, |b|\}^3$
+
+    或根据 习题17 中的结论，有 $|f(x) - I_h(x)| \leq \dfrac{1}{4!}\times \dfrac{h^4}{16}\times \sup_{x\in[a,b]}f^{(4)}(x) = \dfrac{h^4}{16}$.
+
+    \item [15.] 习题25
+    
+    \begin{itemize}
+        \item [(1)]
+        积分是线性的，所以该等式显然成立：
+        
+        $\int_a^b[f^{\prime\prime}(x)]^2 \mathtt{d}x - \int_a^b[S^{\prime\prime}(x)]^2\mathtt{d}x = \int_a^b \left([f^{\prime\prime}(x)]^2-[S^{\prime\prime}(x)]^2 \right)\mathtt{d}x = \int_a^b \left([f^{\prime\prime}(x)]-[S^{\prime\prime}(x)] \right)^2 + 2S^{\prime\prime}(x)[f^{\prime\prime}(x) - S^{\prime\prime}(x)]\mathtt{d}x = \int_a^b [f^{\prime\prime}(x) - S^{\prime\prime}(x)]^2\mathtt{d}x + 2\int_a^b S^{\prime\prime}(x)[f^{\prime\prime}(x) - S^{\prime\prime}(x)]\mathtt{d}x$
+
+        \item [(2)]
+        由分部积分容易得到 
+        $$\begin{array}{ll}\int_a^b S^{\prime\prime}(f^{\prime\prime} - S^{\prime\prime})\mathtt{d} x &= \int_a^b S^{\prime\prime} \mathtt{d}\left(f^\prime - S^\prime\right) \\&= [S^{\prime\prime}(f^\prime-S^\prime)]|_a^b - \int_a^b (f^\prime - S^\prime) \mathtt{d} S^{\prime\prime} \end{array}$$
+
+        注意到 $S^{\prime\prime\prime} = C$ 是常数， $\int_a^b (f^\prime - S^\prime) \mathtt{d} S^{\prime\prime} = \int_a^b (f^\prime - S^\prime) S^{\prime\prime\prime} \mathtt{d}x = C(f - S)|_a^b = 0$. (由插值条件, $f(a) = S(a), f(b) = S(b)$).
+        所以 $\int_a^b S^{\prime\prime}(f^{\prime\prime} - S^{\prime\prime})\mathtt{d} x = [S^{\prime\prime}(f^\prime-S^\prime)]|_a^b = S^{\prime\prime}(b)[f^\prime(b) - S^\prime(b)] - S^{\prime\prime}(a)[f^\prime(a) - S^\prime(a)]$.
+
+    \end{itemize}
+\end{itemize}
+\end{spacing}
+
+
+\end{document}
